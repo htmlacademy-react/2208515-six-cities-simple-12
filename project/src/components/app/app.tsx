@@ -4,7 +4,6 @@ import {AppRoute} from '../../const';
 import MainScreen from '../../pages/main-screen/main-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
-import MainEmptyScreen from '../../pages/main-empty-screen/main-empty-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 
 type AppScreenProps = {
@@ -28,10 +27,6 @@ function App({plasesCount, email}: AppScreenProps): JSX.Element {
           <Route
             path={AppRoute.Room}
             element={<PropertyScreen email={email} />}
-          />
-          <Route
-            path={AppRoute.MainEmpty}
-            element={<MainEmptyScreen email={email} />}
           />
           <Route
             path="*"

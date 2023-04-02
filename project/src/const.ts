@@ -1,6 +1,5 @@
 export enum AppRoute {
   Main = '/',
   Login = '/login',
-  Room = '/offer/:id',
-  MainEmpty = '/empty'
+  Room = '/offer/:id'
 }

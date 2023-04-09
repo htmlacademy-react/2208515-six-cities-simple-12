@@ -1,15 +1,21 @@
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
-import {Offers} from '../../types/offer';
+import {Offers, ActiveOffer} from '../../types/offer';
 import OffersCardList from '../../components/offers-card-list/offers-card-list';
+import {useState} from 'react';
 
 type MainScreenProps = {
-  plasesCount: number;
   email: string;
   offers: Offers;
 }
 
-function MainScreen ({plasesCount, email, offers}: MainScreenProps): JSX.Element {
+function MainScreen ({email, offers}: MainScreenProps): JSX.Element {
+  const [, setActiveCard] = useState<ActiveOffer>(null);
+
+  const handleActiveCardChange = (offer: ActiveOffer) => {
+    setActiveCard(offer);
+  };
+
   return (
     <>
       <Helmet>
@@ -85,7 +91,7 @@ function MainScreen ({plasesCount, email, offers}: MainScreenProps): JSX.Element
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{plasesCount} places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -101,7 +107,7 @@ function MainScreen ({plasesCount, email, offers}: MainScreenProps): JSX.Element
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersCardList offers={offers} />
+              <OffersCardList onActiveCardChange={handleActiveCardChange} offers={offers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>

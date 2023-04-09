@@ -1,3 +1,4 @@
+import { type } from 'os';
 import {Offers} from '../types/offer';
 
 export const offers: Offers = [
@@ -130,5 +131,4 @@ export const offers: Offers = [
   }
 ];
 
-// Для авторизованных пользователей отображается форма отправки нового отзыва.
 

@@ -18,7 +18,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
   const params = useParams();
   const offer = offers.find((item) => item.id === params.id);
 
-  if (offer === undefined) {
+  if (!offer) {
     return <NotFoundScreen />;
   }
 

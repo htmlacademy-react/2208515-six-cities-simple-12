@@ -1,13 +1,15 @@
 import {Link} from 'react-router-dom';
-import OfferCard from '../../components/offer-card/offer-card';
 import {Helmet} from 'react-helmet-async';
+import {Offers} from '../../types/offer';
+import OffersCardList from '../../components/offers-card-list/offers-card-list';
 
 type MainScreenProps = {
   plasesCount: number;
   email: string;
+  offers: Offers;
 }
 
-function MainScreen ({plasesCount, email}: MainScreenProps): JSX.Element {
+function MainScreen ({plasesCount, email, offers}: MainScreenProps): JSX.Element {
   return (
     <>
       <Helmet>
@@ -99,13 +101,7 @@ function MainScreen ({plasesCount, email}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <OfferCard />
-                <OfferCard />
-                <OfferCard />
-                <OfferCard />
-                <OfferCard />
-              </div>
+              <OffersCardList offers={offers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>

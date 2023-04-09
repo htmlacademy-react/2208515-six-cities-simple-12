@@ -5,20 +5,31 @@ import MainScreen from '../../pages/main-screen/main-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
+import {Offers} from '../../types/offer';
+import {Reviews} from '../../types/review';
 
 type AppScreenProps = {
   plasesCount: number;
   email: string;
+  offers: Offers;
+  reviews: Reviews;
 }
 
-function App({plasesCount, email}: AppScreenProps): JSX.Element {
+function App({plasesCount, email, offers, reviews}: AppScreenProps): JSX.Element {
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
           <Route
             path={AppRoute.Main}
-            element={<MainScreen plasesCount={plasesCount} email={email} />}
+            element={
+              <MainScreen
+                plasesCount={plasesCount}
+                email={email}
+                offers={offers}
+              />
+            }
           />
           <Route
             path={AppRoute.Login}
@@ -26,7 +37,13 @@ function App({plasesCount, email}: AppScreenProps): JSX.Element {
           />
           <Route
             path={AppRoute.Room}
-            element={<PropertyScreen email={email} />}
+            element={
+              <PropertyScreen
+                email={email}
+                offers={offers}
+                reviews={reviews}
+              />
+            }
           />
           <Route
             path="*"

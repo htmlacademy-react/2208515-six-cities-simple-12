@@ -1,4 +1,3 @@
-import { type } from 'os';
 import {Offers} from '../types/offer';
 
 export const offers: Offers = [

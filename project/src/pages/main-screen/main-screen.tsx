@@ -1,19 +1,28 @@
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
-import {Offers, ActiveOffer} from '../../types/offer';
+import {Location, Offers, Offer} from '../../types/offer';
 import OffersCardList from '../../components/offers-card-list/offers-card-list';
 import {useState} from 'react';
+import Map from '../../components/map/map';
 
 type MainScreenProps = {
   email: string;
   offers: Offers;
+  location: Location;
 }
 
-function MainScreen ({email, offers}: MainScreenProps): JSX.Element {
-  const [, setActiveCard] = useState<ActiveOffer>(null);
+function MainScreen (props: MainScreenProps): JSX.Element {
+  const {email, offers, location} = props;
 
-  const handleActiveCardChange = (offer: ActiveOffer) => {
-    setActiveCard(offer);
+  const [selectedOffer, setSelectedOffer] = useState<Offer | undefined> (
+    undefined
+  );
+
+  const onListItemHover = (id: string) => {
+    const currentOffer = offers.find((offer) =>
+      offer.id === id,
+    );
+    setSelectedOffer (currentOffer);
   };
 
   return (
@@ -70,9 +79,9 @@ function MainScreen ({email, offers}: MainScreenProps): JSX.Element {
                 </Link>
               </li>
               <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
+                <Link className="locations__item-link tabs__item tabs__item--active" to="/">
                   <span>Amsterdam</span>
-                </a>
+                </Link>
               </li>
               <li className="locations__item">
                 <Link className="locations__item-link tabs__item" to="/">
@@ -107,10 +116,12 @@ function MainScreen ({email, offers}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersCardList onActiveCardChange={handleActiveCardChange} offers={offers} />
+              <OffersCardList onListItemHover={onListItemHover} offers={offers} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map location={location} offers={offers} selectedOffer={selectedOffer}/>
+              </section>
             </div>
           </div>
         </div>
@@ -120,3 +131,4 @@ function MainScreen ({email, offers}: MainScreenProps): JSX.Element {
 }
 
 export default MainScreen;
+

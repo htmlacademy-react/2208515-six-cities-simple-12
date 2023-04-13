@@ -2,6 +2,14 @@ import {Offers} from '../types/offer';
 
 export const offers: Offers = [
   {
+    city: {
+      location: {
+        lat: 52.3909553943508,
+        lng: 4.85309666406198,
+        zoom: 10
+      },
+      name: 'Amsterdam'
+    },
     id: '1',
     picture: [
       'img/apartment-01.jpg',
@@ -35,6 +43,14 @@ export const offers: Offers = [
     }
   },
   {
+    city: {
+      location: {
+        lat: 52.3909553943508,
+        lng: 4.85309666406198,
+        zoom: 10
+      },
+      name: 'Amsterdam'
+    },
     id: '2',
     picture: [
       'img/room.jpg'
@@ -64,6 +80,14 @@ export const offers: Offers = [
     }
   },
   {
+    city: {
+      location: {
+        lat: 52.3909553943508,
+        lng: 4.85309666406198,
+        zoom: 10
+      },
+      name: 'Amsterdam'
+    },
     id: '3',
     picture: [
       'img/apartment-03.jpg',
@@ -94,6 +118,14 @@ export const offers: Offers = [
     }
   },
   {
+    city: {
+      location: {
+        lat: 52.3909553943508,
+        lng: 4.85309666406198,
+        zoom: 10
+      },
+      name: 'Amsterdam'
+    },
     id: '4',
     picture: [
       'img/room.jpg',

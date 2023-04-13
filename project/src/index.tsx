@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
 import {offers} from './mocks/offers';
 import {reviews} from './mocks/reviews';
+import {CITY} from './mocks/city';
 
 const Setting = {
   email: 'Oliver.conner@gmail.com',
@@ -18,6 +19,7 @@ root.render(
       email={Setting.email}
       offers={offers}
       reviews={reviews}
+      location={CITY.location}
     />
   </React.StrictMode>,
 );

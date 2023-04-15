@@ -18,7 +18,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
     undefined
   );
 
-  const onListItemHover = (id: string) => {
+  const listItemHoverHandler = (id: string) => {
     const currentOffer = offers.find((offer) =>
       offer.id === id,
     );
@@ -116,7 +116,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersCardList onListItemHover={onListItemHover} offers={offers} />
+              <OffersCardList onListItemHover={listItemHoverHandler} offers={offers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">

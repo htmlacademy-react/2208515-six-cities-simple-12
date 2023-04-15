@@ -4,8 +4,8 @@ export const offers: Offers = [
   {
     city: {
       location: {
-        lat: 52.3909553943508,
-        lng: 4.85309666406198,
+        lat: 52.3709564043902,
+        lng: 4.86309676406198,
         zoom: 10
       },
       name: 'Amsterdam'
@@ -82,8 +82,8 @@ export const offers: Offers = [
   {
     city: {
       location: {
-        lat: 52.3909553943508,
-        lng: 4.85309666406198,
+        lat: 52.3509553943508,
+        lng: 4.78309666406198,
         zoom: 10
       },
       name: 'Amsterdam'
@@ -120,8 +120,8 @@ export const offers: Offers = [
   {
     city: {
       location: {
-        lat: 52.3909553943508,
-        lng: 4.85309666406198,
+        lat: 52.3509553943508,
+        lng: 4.94309666406198,
         zoom: 10
       },
       name: 'Amsterdam'

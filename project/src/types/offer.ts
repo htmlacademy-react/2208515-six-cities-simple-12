@@ -4,7 +4,19 @@ export type Host = {
   isPro: boolean;
 };
 
+export type Location = {
+  lat: number;
+  lng: number;
+  zoom: number;
+}
+
+export type City = {
+  location: Location;
+  name: string;
+}
+
 export type Offer = {
+  city: City;
   id: string;
   picture: string[];
   heading: string;

@@ -1,18 +1,18 @@
 import {Link} from 'react-router-dom';
-import {Offer, ActiveOffer} from '../../types/offer';
+import {Offer} from '../../types/offer';
 
 type OfferCardProps = {
   offer: Offer;
-  onActiveCardChange: (activeOffer: ActiveOffer) => void;
+  onMouseOverHandler: (id: string) => void;
 }
 
-function OfferCard ({offer, onActiveCardChange}: OfferCardProps): JSX.Element {
+function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
   const {id, picture, heading, isPremium, type, rating, price} = offer;
   const showRating = rating / 5 * 100;
   const showPremium = isPremium ? (<div className="place-card__mark"><span>Premium</span></div>) : '';
 
   return (
-    <article onMouseEnter={() => onActiveCardChange(offer)} onMouseLeave={() => onActiveCardChange(null)} className="cities__card place-card">
+    <article onMouseOver={() => onMouseOverHandler(id)} className="cities__card place-card">
       {showPremium}
 
       <div className="cities__image-wrapper place-card__image-wrapper">

@@ -1,25 +1,37 @@
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
-import {Location, Offers, Offer} from '../../types/offer';
+import {City, Offer} from '../../types/offer';
 import OffersCardList from '../../components/offers-card-list/offers-card-list';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import Map from '../../components/map/map';
+import {fillOffers, changeCity} from '../../store/action';
+import CitiesList from '../../components/cities-list/cities-list';
 
 type MainScreenProps = {
   email: string;
-  offers: Offers;
-  location: Location;
 }
 
 function MainScreen (props: MainScreenProps): JSX.Element {
-  const {email, offers, location} = props;
+  const {email} = props;
+
+  const dispatch = useAppDispatch();
+  const currentCity = useAppSelector((state) => state.city);
+  const allOffers = useAppSelector((state) => state.offers);
+  const currentOffers = useAppSelector(() => allOffers.filter((offer) => offer.city.name === currentCity.name));
+
+  useEffect(() => {
+    dispatch(fillOffers(allOffers));
+  }, [dispatch]);
+
+  const cityChangeHandler = (city: City) => {dispatch(changeCity(city));};
 
   const [selectedOffer, setSelectedOffer] = useState<Offer | undefined> (
     undefined
   );
 
   const listItemHoverHandler = (id: string) => {
-    const currentOffer = offers.find((offer) =>
+    const currentOffer = currentOffers.find((offer) =>
       offer.id === id,
     );
     setSelectedOffer (currentOffer);
@@ -62,45 +74,14 @@ function MainScreen (props: MainScreenProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="/">
-                  <span>Paris</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="/">
-                  <span>Cologne</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="/">
-                  <span>Brussels</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item tabs__item--active" to="/">
-                  <span>Amsterdam</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="/">
-                  <span>Hamburg</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="/">
-                  <span>Dusseldorf</span>
-                </Link>
-              </li>
-            </ul>
+            <CitiesList city={currentCity} onCityClick={cityChangeHandler}/>
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+              <b className="places__found">{currentOffers.length} places to stay in {currentCity.name}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -116,11 +97,11 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersCardList onListItemHover={listItemHoverHandler} offers={offers} />
+              <OffersCardList onListItemHover={listItemHoverHandler} offers={currentOffers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map location={location} offers={offers} selectedOffer={selectedOffer}/>
+                <Map location={currentCity.location} offers={currentOffers} selectedOffer={selectedOffer}/>
               </section>
             </div>
           </div>

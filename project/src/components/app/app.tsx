@@ -5,18 +5,17 @@ import MainScreen from '../../pages/main-screen/main-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
-import {Location, Offers} from '../../types/offer';
+import {Offers} from '../../types/offer';
 import {Reviews} from '../../types/review';
 
 type AppScreenProps = {
   email: string;
   offers: Offers;
   reviews: Reviews;
-  location: Location;
 }
 
 function App(props: AppScreenProps): JSX.Element {
-  const {email, offers, reviews, location} = props;
+  const {email, offers, reviews} = props;
 
   return (
     <HelmetProvider>
@@ -27,8 +26,6 @@ function App(props: AppScreenProps): JSX.Element {
             element={
               <MainScreen
                 email={email}
-                offers={offers}
-                location={location}
               />
             }
           />

@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
+import {Provider} from 'react-redux';
 import {offers} from './mocks/offers';
 import {reviews} from './mocks/reviews';
-import {CITY} from './mocks/city';
+import {store} from './store';
 
 const Setting = {
   email: 'Oliver.conner@gmail.com',
@@ -15,11 +16,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App
-      email={Setting.email}
-      offers={offers}
-      reviews={reviews}
-      location={CITY.location}
-    />
+    <Provider store = {store}>
+      <App
+        email={Setting.email}
+        offers={offers}
+        reviews={reviews}
+      />
+    </Provider>
   </React.StrictMode>,
 );

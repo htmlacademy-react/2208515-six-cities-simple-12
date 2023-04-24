@@ -1,28 +1,25 @@
-import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
 import {City, Offer} from '../../types/offer';
 import OffersCardList from '../../components/offers-card-list/offers-card-list';
 import {useState, useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import Map from '../../components/map/map';
-import {fillOffers, changeCity} from '../../store/action';
+import {changeCity} from '../../store/action';
 import CitiesList from '../../components/cities-list/cities-list';
+import {fetchOfferAction} from '../../store/api-action';
+import HeaderNav from '../../components/header-nav/header-nav';
 
-type MainScreenProps = {
-  email: string;
-}
-
-function MainScreen (props: MainScreenProps): JSX.Element {
-  const {email} = props;
-
+function MainScreen (): JSX.Element {
   const dispatch = useAppDispatch();
   const currentCity = useAppSelector((state) => state.city);
-  const allOffers = useAppSelector((state) => state.offers);
-  const currentOffers = useAppSelector(() => allOffers.filter((offer) => offer.city.name === currentCity.name));
+  const offers = useAppSelector((state) => state.offers);
+  const currentOffers = useAppSelector(() => offers.filter((offer) => offer.city.name === currentCity.name));
 
   useEffect(() => {
-    dispatch(fillOffers(allOffers));
-  }, [dispatch]);
+    if (!offers.length) {
+      dispatch(fetchOfferAction());
+    }
+  }, [dispatch, offers]);
 
   const cityChangeHandler = (city: City) => {dispatch(changeCity(city));};
 
@@ -30,7 +27,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
     undefined
   );
 
-  const listItemHoverHandler = (id: string) => {
+  const listItemHoverHandler = (id: number) => {
     const currentOffer = currentOffers.find((offer) =>
       offer.id === id,
     );
@@ -51,21 +48,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
               </a>
             </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <div className="header__nav-profile">
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">{email}</span>
-                  </div>
-                </li>
-                <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+            <HeaderNav />
           </div>
         </div>
       </header>
@@ -100,9 +83,7 @@ function MainScreen (props: MainScreenProps): JSX.Element {
               <OffersCardList onListItemHover={listItemHoverHandler} offers={currentOffers} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map">
-                <Map location={currentCity.location} offers={currentOffers} selectedOffer={selectedOffer}/>
-              </section>
+              <Map className={'cities__map map'} city={currentCity} offers={currentOffers} selectedOffer={selectedOffer}/>
             </div>
           </div>
         </div>

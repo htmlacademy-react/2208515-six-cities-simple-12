@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
 import {Provider} from 'react-redux';
-import {offers} from './mocks/offers';
-import {reviews} from './mocks/reviews';
 import {store} from './store';
+import ErrorMessage from './components/error-message/error-message';
+import {checkAuthAction, fetchOfferAction} from './store/api-action';
 
-const Setting = {
-  email: 'Oliver.conner@gmail.com',
-} as const;
+store.dispatch(fetchOfferAction());
+store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -17,11 +16,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <App
-        email={Setting.email}
-        offers={offers}
-        reviews={reviews}
-      />
+      <ErrorMessage />
+      <App />
     </Provider>
   </React.StrictMode>,
 );

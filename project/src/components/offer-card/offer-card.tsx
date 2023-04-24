@@ -3,11 +3,11 @@ import {Offer} from '../../types/offer';
 
 type OfferCardProps = {
   offer: Offer;
-  onMouseOverHandler: (id: string) => void;
+  onMouseOverHandler: (id: number) => void;
 }
 
 function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
-  const {id, picture, heading, isPremium, type, rating, price} = offer;
+  const {id, previewImage, title, isPremium, type, rating, price} = offer;
   const showRating = rating / 5 * 100;
   const showPremium = isPremium ? (<div className="place-card__mark"><span>Premium</span></div>) : '';
 
@@ -17,7 +17,7 @@ function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
 
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={picture[0]} width="260" height="200" alt="Place image"/>
+          <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
         </Link>
       </div>
 
@@ -37,7 +37,7 @@ function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
         </div>
 
         <h2 className="place-card__name">
-          <Link to={`/offer/${id}`}>{heading}</Link>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>

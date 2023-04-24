@@ -2,28 +2,34 @@ import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import {Helmet} from 'react-helmet-async';
 import CommentForm from '../../components/comment-form/comment-form';
-import {Offers} from '../../types/offer';
-import {Reviews} from '../../types/review';
 import {useParams} from 'react-router-dom';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import ReviewsList from '../../components/reviews-list/reviews-list';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useEffect} from 'react';
+import {MAX_IMAGES_COUNT} from '../../const';
+import {fetchReviewAction, fetchOfferIdAction} from '../../store/api-action';
+import HeaderNav from '../../components/header-nav/header-nav';
 
-type PropertyScreenProps = {
-  email: string;
-  offers: Offers;
-  reviews: Reviews;
-}
+function PropertyScreen (): JSX.Element {
+  const {id} = useParams();
+  const paramsId = Number(id);
+  const offers = useAppSelector((state) => state.offers);
+  const offer = offers.find((item) => item.id === paramsId);
+  const reviews = useAppSelector((state) => state.reviews);
 
-function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Element {
-  const params = useParams();
-  const offer = offers.find((item) => item.id === params.id);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchReviewAction(paramsId));
+    dispatch(fetchOfferIdAction(paramsId));
+  }, [dispatch, paramsId]);
 
   if (!offer) {
     return <NotFoundScreen />;
   }
 
-  const {picture, heading, isPremium, type, rating, price, countBedrooms, maxAdult, inside, infoByHost, description} = offer;
-  const {src, name, isPro} = infoByHost;
+  const {images, title, isPremium, type, rating, price, bedrooms, maxAdults, goods, host, description} = offer;
+  const {avatarUrl, name, isPro} = host;
 
   const showRating = rating / 5 * 100;
 
@@ -43,21 +49,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
               <div className="header__left">
                 <Logo />
               </div>
-              <nav className="header__nav">
-                <ul className="header__nav-list">
-                  <li className="header__nav-item user">
-                    <div className="header__nav-profile">
-                      <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                      <span className="header__user-name user__name">{email}</span>
-                    </div>
-                  </li>
-                  <li className="header__nav-item">
-                    <Link className="header__nav-link" to="/">
-                      <span className="header__signout">Sign out</span>
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
+              <HeaderNav />
             </div>
           </div>
         </header>
@@ -67,7 +59,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
 
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                {picture.map((item) => (
+                {images.slice(0, MAX_IMAGES_COUNT).map((item) => (
                   <div className="property__image-wrapper" key={item}>
                     <img className="property__image" src={item} alt="Photo studio"/>
                   </div>)
@@ -81,7 +73,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
 
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {heading}
+                    {title}
                   </h1>
                 </div>
 
@@ -98,10 +90,10 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
                     {type}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    {countBedrooms} Bedrooms
+                    {bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                    Max {maxAdult} adults
+                    Max {maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
@@ -111,7 +103,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    {inside.map((item) => (
+                    {goods.map((item) => (
                       <li className="property__inside-item" key={item}>
                         {item}
                       </li>)
@@ -122,7 +114,7 @@ function PropertyScreen ({email, offers, reviews}: PropertyScreenProps): JSX.Ele
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
                     <div className={isPro ? 'property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper' : 'property__avatar-wrapper user__avatar-wrapper'}>
-                      <img className="property__avatar user__avatar" src={src} width="74" height="74" alt="Host avatar"/>
+                      <img className="property__avatar user__avatar" src={avatarUrl} width="74" height="74" alt="Host avatar"/>
                     </div>
                     <span className="property__user-name">
                       {name}

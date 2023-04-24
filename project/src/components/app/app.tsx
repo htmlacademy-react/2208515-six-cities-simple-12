@@ -1,32 +1,33 @@
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import {HelmetProvider} from 'react-helmet-async';
-import {AppRoute} from '../../const';
+import {AppRoute, AuthorizationStatus} from '../../const';
 import MainScreen from '../../pages/main-screen/main-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
-import {Offers} from '../../types/offer';
-import {Reviews} from '../../types/review';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import {useAppSelector} from '../../hooks';
+import HistoryRouter from '../history-route/history-route';
+import browserHistory from '../../browser-history';
 
-type AppScreenProps = {
-  email: string;
-  offers: Offers;
-  reviews: Reviews;
-}
+function App(): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
 
-function App(props: AppScreenProps): JSX.Element {
-  const {email, offers, reviews} = props;
+  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
+      <HistoryRouter history={browserHistory}>
         <Routes>
           <Route
             path={AppRoute.Main}
             element={
-              <MainScreen
-                email={email}
-              />
+              <MainScreen />
             }
           />
           <Route
@@ -36,11 +37,7 @@ function App(props: AppScreenProps): JSX.Element {
           <Route
             path={AppRoute.Room}
             element={
-              <PropertyScreen
-                email={email}
-                offers={offers}
-                reviews={reviews}
-              />
+              <PropertyScreen />
             }
           />
           <Route
@@ -48,7 +45,7 @@ function App(props: AppScreenProps): JSX.Element {
             element={<NotFoundScreen />}
           />
         </Routes>
-      </BrowserRouter>
+      </HistoryRouter>
     </HelmetProvider>
   );
 }

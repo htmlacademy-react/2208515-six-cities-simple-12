@@ -3,7 +3,7 @@ import OfferCard from '../offer-card/offer-card';
 
 type OffersCardListProps = {
   offers: Offers;
-  onListItemHover: (onListItemName: string) => void;
+  onListItemHover: (onListItemName: number) => void;
 }
 
 function OffersCardList ({offers, onListItemHover}: OffersCardListProps): JSX.Element {

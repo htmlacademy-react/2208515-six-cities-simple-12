@@ -8,7 +8,7 @@ import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
 import {Offers, Offer} from '../types/offer';
 import {Reviews} from '../types/review.js';
-import { ReviewData } from '../types/review-data';
+import {ReviewData} from '../types/review-data';
 
 export const fetchOfferAction = createAsyncThunk<Offers, undefined, {
   dispatch: AppDispatch;

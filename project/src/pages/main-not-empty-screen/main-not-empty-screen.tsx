@@ -11,7 +11,7 @@ type MainNotEmptyScreenProps = {
   currentCity: City;
   city: City;
   selectedOffer: Offer | undefined;
-  onListItemHover: (onListItemName: number) => void
+  onListItemHover: (onListItemName: number) => void;
 }
 
 function MainNotEmptyScreen ({currentCity, city, offers, selectedOffer, onListItemHover}: MainNotEmptyScreenProps): JSX.Element {

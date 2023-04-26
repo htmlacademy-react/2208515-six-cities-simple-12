@@ -77,5 +77,29 @@ export enum APIRoute {
 }
 
 export const TIMEOUT_SHOW_ERROR = 2000;
-
 export const MAX_IMAGES_COUNT = 6;
+export const MAX_COMMENTS_COUNT = 10;
+export const MIN_LENGTH_COMMENT = 50;
+export const MAX_LENGTH_COMMENT = 300;
+export const PASSWORD_REG_EXP = (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/);
+
+export enum NameSpace {
+  Data = 'DATA',
+  Offers = 'OFFERS',
+  User = 'USER',
+}
+
+export const RATING_LABELS = [
+  {value: 5, title: 'perfect'},
+  {value: 4, title: 'good'},
+  {value: 3, title: 'not bad'},
+  {value: 2, title: 'badly'},
+  {value: 1, title: 'terribly'},
+];
+
+export enum SortingOption {
+  Popular = 'Popular',
+  PriceLow = 'Price: low to high',
+  PriceHigh = 'Price: high to low',
+  Top = 'Top rated first',
+}

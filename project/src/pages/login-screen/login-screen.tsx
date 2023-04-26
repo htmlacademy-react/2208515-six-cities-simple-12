@@ -7,10 +7,11 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-action';
 import {AuthData} from '../../types/auth-data';
 import {AppRoute} from '../../const';
-import { AuthorizationStatus } from '../../const';
+import {AuthorizationStatus, PASSWORD_REG_EXP} from '../../const';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 function LoginScreen (): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
@@ -30,10 +31,13 @@ function LoginScreen (): JSX.Element {
     evt.preventDefault();
 
     if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
-        login: loginRef.current.value,
-        password: passwordRef.current.value,
-      });
+      if (PASSWORD_REG_EXP.test(passwordRef.current.value)) {
+        onSubmit({
+          login: loginRef.current.value,
+          password: passwordRef.current.value,
+        });
+        navigate(AppRoute.Main);
+      }
     }
   };
 

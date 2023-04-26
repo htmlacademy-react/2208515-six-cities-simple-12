@@ -8,7 +8,7 @@ type OfferCardProps = {
 
 function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
   const {id, previewImage, title, isPremium, type, rating, price} = offer;
-  const showRating = rating / 5 * 100;
+  const showRating = Math.round(rating) * 20;
   const showPremium = isPremium ? (<div className="place-card__mark"><span>Premium</span></div>) : '';
 
   return (

@@ -7,7 +7,10 @@ type ReviewItemProps = {
 function ReviewItem ({review}: ReviewItemProps): JSX.Element {
   const {user, rating, date, comment} = review;
   const {avatarUrl, name} = user;
-  const showRating = Math.round(rating / 5) * 100;
+  const showRating = Math.round(rating * 20);
+  const showData = new Date(date);
+  const showMonth = showData.toLocaleString('en-EN', {month: 'long'});
+  const showYear = showData.getFullYear();
 
   return (
     <li className="reviews__item">
@@ -29,7 +32,7 @@ function ReviewItem ({review}: ReviewItemProps): JSX.Element {
         <p className="reviews__text">
           {comment}
         </p>
-        <time className="reviews__time" dateTime="2019-04-24">{date}</time>
+        <time className="reviews__time" dateTime="2019-04-24">{showMonth} {showYear}</time>
       </div>
     </li>
   );

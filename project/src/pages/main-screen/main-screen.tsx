@@ -1,31 +1,27 @@
 import {Helmet} from 'react-helmet-async';
+import Logo from '../../components/logo/logo';
 import {City, Offer} from '../../types/offer';
-import OffersCardList from '../../components/offers-card-list/offers-card-list';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import Map from '../../components/map/map';
-import {changeCity} from '../../store/action';
 import CitiesList from '../../components/cities-list/cities-list';
-import {fetchOfferAction} from '../../store/api-action';
 import HeaderNav from '../../components/header-nav/header-nav';
+import {getOffers} from '../../store/offer-data/selector';
+import {getCity} from '../../store/offers-process/selector';
+import {changeCity} from '../../store/offers-process/offers-process';
+import MainEmptyScreen from '../main-empty-screen/main-empty-screen';
+import MainNotEmptyScreen from '../main-not-empty-screen/main-not-empty-screen';
 
 function MainScreen (): JSX.Element {
   const dispatch = useAppDispatch();
-  const currentCity = useAppSelector((state) => state.city);
-  const offers = useAppSelector((state) => state.offers);
+  const currentCity = useAppSelector(getCity);
+  const offers = useAppSelector(getOffers);
   const currentOffers = useAppSelector(() => offers.filter((offer) => offer.city.name === currentCity.name));
-
-  useEffect(() => {
-    if (!offers.length) {
-      dispatch(fetchOfferAction());
-    }
-  }, [dispatch, offers]);
-
-  const cityChangeHandler = (city: City) => {dispatch(changeCity(city));};
 
   const [selectedOffer, setSelectedOffer] = useState<Offer | undefined> (
     undefined
   );
+
+  const cityChangeHandler = (city: City) => {dispatch(changeCity(city));};
 
   const listItemHoverHandler = (id: number) => {
     const currentOffer = currentOffers.find((offer) =>
@@ -44,9 +40,7 @@ function MainScreen (): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-              </a>
+              <Logo />
             </div>
             <HeaderNav />
           </div>
@@ -61,31 +55,17 @@ function MainScreen (): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{currentOffers.length} places to stay in {currentCity.name}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
-              <OffersCardList onListItemHover={listItemHoverHandler} offers={currentOffers} />
-            </section>
-            <div className="cities__right-section">
-              <Map className={'cities__map map'} city={currentCity} offers={currentOffers} selectedOffer={selectedOffer}/>
-            </div>
-          </div>
+          {
+            !offers ?
+              <MainEmptyScreen currentCity = {currentCity} /> :
+              <MainNotEmptyScreen
+                offers={currentOffers}
+                currentCity={currentCity}
+                city={currentCity}
+                selectedOffer={selectedOffer}
+                onListItemHover={listItemHoverHandler}
+              />
+          }
         </div>
       </main>
     </>

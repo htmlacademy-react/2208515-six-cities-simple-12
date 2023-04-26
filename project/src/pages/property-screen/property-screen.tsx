@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import {Helmet} from 'react-helmet-async';
 import CommentForm from '../../components/comment-form/comment-form';
@@ -6,23 +5,42 @@ import {useParams} from 'react-router-dom';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {useEffect} from 'react';
-import {MAX_IMAGES_COUNT} from '../../const';
-import {fetchReviewAction, fetchOfferIdAction} from '../../store/api-action';
+import {useEffect, useState} from 'react';
+import {MAX_IMAGES_COUNT, AuthorizationStatus} from '../../const';
+import {fetchReviewAction, fetchOfferIdAction, fetchNearbyOffersAction} from '../../store/api-action';
 import HeaderNav from '../../components/header-nav/header-nav';
+import {getOffer, getOffersNearby, getReview} from '../../store/offer-data/selector';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import OffersCardList from '../../components/offers-card-list/offers-card-list';
+import Map from '../../components/map/map';
+import {Offer} from '../../types/offer';
 
 function PropertyScreen (): JSX.Element {
-  const {id} = useParams();
-  const paramsId = Number(id);
-  const offers = useAppSelector((state) => state.offers);
-  const offer = offers.find((item) => item.id === paramsId);
-  const reviews = useAppSelector((state) => state.reviews);
-
   const dispatch = useAppDispatch();
+  const {id} = useParams();
+  const offerId = Number(id);
+  const reviews = useAppSelector(getReview);
+  const offersNearby = useAppSelector(getOffersNearby);
+  const offer = useAppSelector(getOffer);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isAuth = authorizationStatus === AuthorizationStatus.Auth;
+
   useEffect(() => {
-    dispatch(fetchReviewAction(paramsId));
-    dispatch(fetchOfferIdAction(paramsId));
-  }, [dispatch, paramsId]);
+    dispatch(fetchReviewAction(offerId));
+    dispatch(fetchNearbyOffersAction(offerId));
+    dispatch(fetchOfferIdAction(offerId));
+  }, [dispatch, offerId]);
+
+  const [selectedOffer, setSelectedOffer] = useState<Offer | undefined> (
+    undefined
+  );
+
+  const listItemHoverHandler = (i: number) => {
+    const currentOfferNearby = offersNearby.find((offerNearby) =>
+      offerNearby.id === i,
+    );
+    setSelectedOffer (currentOfferNearby);
+  };
 
   if (!offer) {
     return <NotFoundScreen />;
@@ -130,99 +148,26 @@ function PropertyScreen (): JSX.Element {
                 <section className="property__reviews reviews">
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                   <ReviewsList reviews={reviews} />
-                  <CommentForm />
+                  {isAuth && <CommentForm offerId={offerId} />}
                 </section>
               </div>
             </div>
-
-            <section className="property__map map"></section>
+            <Map
+              className={'property'}
+              city={offer.city}
+              offers={[...offersNearby, offer]}
+              selectedOffer={selectedOffer}
+            />
           </section>
 
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              <div className="near-places__list places__list">
-                <article className="near-places__card place-card">
-                  <div className="near-places__image-wrapper place-card__image-wrapper">
-                    <Link to="/">
-                      <img className="place-card__image" src="img/room.jpg" width="260" height="200" alt="Place image"/>
-                    </Link>
-                  </div>
-                  <div className="place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;80</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '80%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <Link to="/">Wood and stone place</Link>
-                    </h2>
-                    <p className="place-card__type">Private room</p>
-                  </div>
-                </article>
-
-                <article className="near-places__card place-card">
-                  <div className="near-places__image-wrapper place-card__image-wrapper">
-                    <Link to="/">
-                      <img className="place-card__image" src="img/apartment-02.jpg" width="260" height="200" alt="Place image"/>
-                    </Link>
-                  </div>
-                  <div className="place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;132</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '80%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <Link to="/">Canal View Prinsengracht</Link>
-                    </h2>
-                    <p className="place-card__type">Apartment</p>
-                  </div>
-                </article>
-
-                <article className="near-places__card place-card">
-                  <div className="place-card__mark">
-                    <span>Premium</span>
-                  </div>
-                  <div className="near-places__image-wrapper place-card__image-wrapper">
-                    <Link to="/">
-                      <img className="place-card__image" src="img/apartment-03.jpg" width="260" height="200" alt="Place image"/>
-                    </Link>
-                  </div>
-                  <div className="place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;180</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '100%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <Link to="/">Nice, cozy, warm big bed apartment</Link>
-                    </h2>
-                    <p className="place-card__type">Apartment</p>
-                  </div>
-                </article>
-              </div>
+              <OffersCardList
+                offers={offersNearby}
+                className={'near-places__list places__list'}
+                onListItemHover={listItemHoverHandler}
+              />
             </section>
           </div>
         </main>

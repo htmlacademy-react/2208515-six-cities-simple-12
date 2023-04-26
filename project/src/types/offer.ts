@@ -1,12 +1,13 @@
 export type Host = {
-  src: string;
+  avatarUrl: string;
+  id: number;
   name: string;
   isPro: boolean;
 };
 
 export type Location = {
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   zoom: number;
 }
 
@@ -16,21 +17,24 @@ export type City = {
 }
 
 export type Offer = {
+  bedrooms: number;
   city: City;
-  id: string;
-  picture: string[];
-  heading: string;
   description: string;
+  goods: string[];
+  host: Host;
+  id: number;
+  images: string[];
   isPremium: boolean;
-  type: string;
-  rating: number;
-  countBedrooms: number;
-  maxAdult: number;
+  location: Location;
+  maxAdults: number;
+  previewImage: string;
   price: number;
-  inside: string[];
-  infoByHost: Host;
+  rating: number;
+  title: string;
+  type: string;
 };
 
 export type Offers = Offer[];
 
 export type ActiveOffer = Offer | null;
+

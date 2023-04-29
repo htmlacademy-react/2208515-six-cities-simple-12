@@ -1,4 +1,4 @@
-import { Offers } from './types/offer';
+import {Offers} from './types/offer';
 import {SortingOption} from './const';
 import {Reviews} from './types/review';
 
@@ -28,4 +28,3 @@ export const sortingReviews = (reviews: Reviews): Reviews => {
 
   return reviews;
 };
-

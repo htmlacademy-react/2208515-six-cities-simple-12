@@ -21,9 +21,9 @@ function MainScreen (): JSX.Element {
     undefined
   );
 
-  const cityChangeHandler = (city: City) => {dispatch(changeCity(city));};
+  const handleCityChange = (city: City) => {dispatch(changeCity(city));};
 
-  const listItemHoverHandler = (id: number) => {
+  const handleListItemHover = (id: number) => {
     const currentOffer = currentOffers.find((offer) =>
       offer.id === id,
     );
@@ -51,7 +51,7 @@ function MainScreen (): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <CitiesList city={currentCity} onCityClick={cityChangeHandler}/>
+            <CitiesList city={currentCity} onCityClick={handleCityChange}/>
           </section>
         </div>
         <div className="cities">
@@ -63,7 +63,7 @@ function MainScreen (): JSX.Element {
                 currentCity={currentCity}
                 city={currentCity}
                 selectedOffer={selectedOffer}
-                onListItemHover={listItemHoverHandler}
+                onListItemHover={handleListItemHover}
               />
           }
         </div>
@@ -73,4 +73,3 @@ function MainScreen (): JSX.Element {
 }
 
 export default MainScreen;
-

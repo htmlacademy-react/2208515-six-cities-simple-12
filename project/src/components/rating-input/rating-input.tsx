@@ -33,4 +33,5 @@ function RatingInput(props: RatingInputProps): JSX.Element {
     </>
   );
 }
+
 export default RatingInput;

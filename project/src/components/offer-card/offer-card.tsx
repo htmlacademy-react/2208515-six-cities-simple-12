@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import {Offer} from '../../types/offer';
+import {MAX_RATING} from '../../const';
 
 type OfferCardProps = {
   offer: Offer;
@@ -8,7 +9,7 @@ type OfferCardProps = {
 
 function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
   const {id, previewImage, title, isPremium, type, rating, price} = offer;
-  const showRating = Math.round(rating) * 20;
+  const showRoundRating = `${Math.round(rating) / MAX_RATING * 100}%`;
   const showPremium = isPremium ? (<div className="place-card__mark"><span>Premium</span></div>) : '';
 
   return (
@@ -31,7 +32,7 @@ function OfferCard ({offer, onMouseOverHandler}: OfferCardProps): JSX.Element {
 
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${showRating}%`}}></span>
+            <span style={{width: showRoundRating}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

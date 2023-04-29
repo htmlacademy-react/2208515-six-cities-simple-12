@@ -5,15 +5,14 @@ import {useParams} from 'react-router-dom';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {useEffect, useState} from 'react';
-import {MAX_IMAGES_COUNT, AuthorizationStatus} from '../../const';
+import {useEffect} from 'react';
+import {MAX_IMAGES_COUNT, AuthorizationStatus, MAX_RATING} from '../../const';
 import {fetchReviewAction, fetchOfferIdAction, fetchNearbyOffersAction} from '../../store/api-action';
 import HeaderNav from '../../components/header-nav/header-nav';
 import {getOffer, getOffersNearby, getReview} from '../../store/offer-data/selector';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import OffersCardList from '../../components/offers-card-list/offers-card-list';
 import Map from '../../components/map/map';
-import {Offer} from '../../types/offer';
 
 function PropertyScreen (): JSX.Element {
   const dispatch = useAppDispatch();
@@ -31,17 +30,6 @@ function PropertyScreen (): JSX.Element {
     dispatch(fetchOfferIdAction(offerId));
   }, [dispatch, offerId]);
 
-  const [selectedOffer, setSelectedOffer] = useState<Offer | undefined> (
-    undefined
-  );
-
-  const listItemHoverHandler = (i: number) => {
-    const currentOfferNearby = offersNearby.find((offerNearby) =>
-      offerNearby.id === i,
-    );
-    setSelectedOffer (currentOfferNearby);
-  };
-
   if (!offer) {
     return <NotFoundScreen />;
   }
@@ -49,7 +37,7 @@ function PropertyScreen (): JSX.Element {
   const {images, title, isPremium, type, rating, price, bedrooms, maxAdults, goods, host, description} = offer;
   const {avatarUrl, name, isPro} = host;
 
-  const showRating = rating / 5 * 100;
+  const showRating = `${rating / MAX_RATING * 100}%`;
 
   return (
     <>
@@ -97,7 +85,7 @@ function PropertyScreen (): JSX.Element {
 
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: `${showRating}%`}}></span>
+                    <span style={{width: showRating}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
                   <span className="property__rating-value rating__value">{rating}</span>
@@ -156,7 +144,7 @@ function PropertyScreen (): JSX.Element {
               className={'property'}
               city={offer.city}
               offers={[...offersNearby, offer]}
-              selectedOffer={selectedOffer}
+              selectedOffer={offer}
             />
           </section>
 
@@ -166,7 +154,7 @@ function PropertyScreen (): JSX.Element {
               <OffersCardList
                 offers={offersNearby}
                 className={'near-places__list places__list'}
-                onListItemHover={listItemHoverHandler}
+                onListItemHover={(evt) => evt}
               />
             </section>
           </div>

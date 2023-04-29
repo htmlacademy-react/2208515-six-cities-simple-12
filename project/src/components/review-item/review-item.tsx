@@ -1,4 +1,5 @@
 import {Review} from '../../types/review';
+import {MAX_RATING} from '../../const';
 
 type ReviewItemProps = {
   review: Review;
@@ -7,7 +8,7 @@ type ReviewItemProps = {
 function ReviewItem ({review}: ReviewItemProps): JSX.Element {
   const {user, rating, date, comment} = review;
   const {avatarUrl, name} = user;
-  const showRating = Math.round(rating * 20);
+  const showRatingComment = `${Math.round(rating) / MAX_RATING * 100}%`;
   const showData = new Date(date);
   const showMonth = showData.toLocaleString('en-EN', {month: 'long'});
   const showYear = showData.getFullYear();
@@ -25,7 +26,7 @@ function ReviewItem ({review}: ReviewItemProps): JSX.Element {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: `${showRating}%`}}></span>
+            <span style={{width: showRatingComment}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

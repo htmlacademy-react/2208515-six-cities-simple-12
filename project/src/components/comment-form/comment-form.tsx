@@ -16,10 +16,10 @@ function CommentForm ({offerId}: CommentFormProps): JSX.Element {
   const [rating, setRating] = useState('');
   const [review, setReview] = useState('');
 
-  const ratingChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setRating(evt.target.value);
   };
-  const reviewChangeHandler = (evt: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleReviewChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(evt.target.value);
   };
 
@@ -36,7 +36,7 @@ function CommentForm ({offerId}: CommentFormProps): JSX.Element {
     dispatch(sendReviewAction(value));
   };
 
-  const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     onSubmit({
       id: offerId,
@@ -53,7 +53,7 @@ function CommentForm ({offerId}: CommentFormProps): JSX.Element {
       className="reviews__form form"
       action="#"
       method="post"
-      onSubmit={submitHandler}
+      onSubmit={handleFormSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
@@ -61,14 +61,14 @@ function CommentForm ({offerId}: CommentFormProps): JSX.Element {
           <RatingInput
             value={label.value}
             title={label.title}
-            onChange={ratingChangeHandler}
+            onChange={handleRatingChange}
             rating={rating}
             key={label.value}
           />)
         )}
       </div>
       <textarea
-        onChange={reviewChangeHandler}
+        onChange={handleReviewChange}
         value={review}
         className="reviews__textarea form__textarea"
         id="review"

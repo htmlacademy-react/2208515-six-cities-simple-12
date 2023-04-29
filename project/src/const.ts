@@ -81,6 +81,7 @@ export const MAX_IMAGES_COUNT = 6;
 export const MAX_COMMENTS_COUNT = 10;
 export const MIN_LENGTH_COMMENT = 50;
 export const MAX_LENGTH_COMMENT = 300;
+export const MAX_RATING = 5;
 export const PASSWORD_REG_EXP = (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/);
 
 export enum NameSpace {
